@@ -14,6 +14,10 @@
 
 _A high-performance visual workspace and analytical platform for exploring genome assemblies, assessing contiguity and biological completeness, investigating structural anomalies, and comparing assembly iterations._
 
+<br />
+
+[![Genome Assembly Studio Overview](docs/screenshots/overview.png)](docs/screenshots/overview.png)
+
 </div>
 
 ---
@@ -30,6 +34,56 @@ Modern genome assembly projects generate iterative candidate genomes across vary
 - Delivers the assembly graph exploration capabilities of **Bandage**.
 - Provides whole-chromosome circular visualization inspired by **Circos**.
 - Implements multi-scale genomic navigation with nucleotide-level zoom.
+
+---
+
+## Visual Showcase
+
+### Executive Assembly Dashboard
+
+Unified view with real-time contiguity metrics ($N_{50}$, $L_{50}$, auN), total genomic span, active projects, and live interactive Circos Genome Wheel preview.
+
+[![Executive Overview](docs/screenshots/overview.png)](docs/screenshots/overview.png)
+
+### Assembly Comparison Studio
+
+Automated Scientific Findings engine deriving actionable conclusions (improvements, regressions, and trade-offs), 9-metric delta matrix, comparative Nx curves ($N_{10}$–$N_{90}$), and missing alignment coverage intervals.
+
+[![Comparison Studio](docs/screenshots/comparison.png)](docs/screenshots/comparison.png)
+
+### Circular Genome Wheel & Multitrack Navigation
+
+Interactive Circos-style chromosome visualization with rotation controls, cytoband rendering, sliding-window GC profile heatmaps, and syntenic Bezier connection ribbons.
+
+[![Circular Genome Wheel](docs/screenshots/explorer-wheel.png)](docs/screenshots/explorer-wheel.png)
+
+### Pairwise Synteny Dot Plot
+
+Interactive 2D whole-genome alignment dot plot with cumulative chromosome coordinates, collinear forward blocks (blue), inversions/translocations (rose), and scaffold boundary guidelines.
+
+[![Synteny Dot Plot](docs/screenshots/explorer-dotplot.png)](docs/screenshots/explorer-dotplot.png)
+
+### Quality & Biological Completeness
+
+Multi-tool benchmarking integrating lineage-specific BUSCO single-copy/duplicated/fragmented ortholog stacks and CheckM2 gradient-boosted completeness and contamination assessments.
+
+[![Quality Reports](docs/screenshots/quality-reports.png)](docs/screenshots/quality-reports.png)
+
+### Assembly Catalog & Management
+
+Complete sequence inventory with instant Rust streaming stats, gap tracking, format detection, direct download of Markdown evaluation reports, and BED gap track exports.
+
+[![Assembly Catalog](docs/screenshots/assemblies.png)](docs/screenshots/assemblies.png)
+
+### High-Performance Rust Sequence CLI (`genome-studio`)
+
+Streaming buffered FASTA, GFA 1.0, and PAF parsers computing exact contiguity metrics, base distributions, and graph topology in sub-millisecond execution time.
+
+<div align="center">
+
+![Rust CLI Demo](docs/screenshots/cli-demo.svg)
+
+</div>
 
 ---
 
@@ -119,8 +173,7 @@ cargo build --release
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install fastapi uvicorn sqlalchemy pydantic python-multipart httpx biopython
-export PYTHONPATH=.
+pip install -r requirements.txt
 python3 -m uvicorn services.api.app.main:app --reload --port 8000
 ```
 
@@ -128,9 +181,9 @@ python3 -m uvicorn services.api.app.main:app --reload --port 8000
 
 ```bash
 pnpm install
-pnpm --filter @genome-studio/ui build
-pnpm --filter @genome-studio/visualization build
-pnpm --filter web dev
+pnpm dev
+# Or run with standard npm:
+# npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -143,26 +196,26 @@ The Rust CLI provides standalone, scriptable sequence analysis commands:
 
 ```bash
 # Calculate assembly contiguity, N50, auN, and GC content
-genome-studio analyze datasets/fixtures/draft_v1.fasta
+./target/release/genome-studio analyze datasets/fixtures/draft_v1.fasta
 
 # Generate binary sequence index
-genome-studio index datasets/fixtures/reference.fasta
+./target/release/genome-studio index datasets/fixtures/reference.fasta
 
-# Calculate sliding-window GC percentage and skew profile
-genome-studio profile datasets/fixtures/draft_v1.fasta --window 1000 --step 500
+# Calculate sliding-window GC percentage and skew profile (--window or --window-size)
+./target/release/genome-studio profile datasets/fixtures/draft_v1.fasta --window 1000 --step 500
 
 # Inspect GFA assembly graph topology
-genome-studio graph-stats datasets/fixtures/assembly_graph.gfa
+./target/release/genome-studio graph-stats datasets/fixtures/assembly_graph.gfa
 
 # Summarize PAF alignment synteny
-genome-studio align-stats datasets/fixtures/v1_to_ref.paf
+./target/release/genome-studio align-stats datasets/fixtures/v1_to_ref.paf
 ```
 
 ---
 
 ## Automated Test Suites
 
-### Rust Core Tests:
+### Rust Core Tests
 
 ```bash
 cargo test --tests
@@ -170,21 +223,21 @@ cargo test --tests
 
 _Result: 10/10 passed across core traits, FASTA/GFA/PAF parsers, N50/auN statistics, and sliding-window tile generation._
 
-### Python Backend & API Tests:
+### Python Backend & API Tests
 
 ```bash
-pytest services/api/tests
+pytest
 ```
 
-_Result: 8/8 passed across health, demo seeding, project CRUD, Rust CLI upload analysis, comparisons, automated findings, and tool detection._
+_Result: 9/9 passed across health checks, demo seeding, project CRUD, Rust CLI upload analysis, comparisons, automated findings, and tool detection._
 
-### Next.js Production Build:
+### Next.js Production Build & TypeScript Verification
 
 ```bash
-pnpm --filter web build
+cd apps/web && ./node_modules/.bin/next build
 ```
 
-_Result: 12/12 static and dynamic routes compiled and verified._
+_Result: 12/12 static and dynamic routes compiled, typechecked, and verified with zero errors._
 
 ---
 
