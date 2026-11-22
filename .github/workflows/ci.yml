@@ -51,13 +51,13 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install fastapi uvicorn sqlalchemy pydantic python-multipart httpx pytest pytest-asyncio
+          pip install -r requirements.txt
 
       - name: Run Pytest
         env:
           PYTHONPATH: .
           GENOME_STUDIO_BIN: ./target/debug/genome-studio
-        run: pytest services/api/tests
+        run: pytest -o asyncio_default_fixture_loop_scope=function services/api/tests
 
   web-build:
     name: Next.js Web Frontend Build
@@ -68,7 +68,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 9.15.4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -79,10 +79,7 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Shared Packages & Next.js App
+      - name: Build Next.js Web App
         env:
           BROWSERSLIST: "defaults"
-        run: |
-          pnpm --filter @genome-studio/ui build
-          pnpm --filter @genome-studio/visualization build
-          pnpm --filter web build
+        run: pnpm --filter web build
