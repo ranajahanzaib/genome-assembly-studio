@@ -1,0 +1,16 @@
+[workspace]
+members = [
+    "crates/assembly-core",
+    "crates/sequence-io",
+    "crates/assembly-stats",
+    "crates/genome-index",
+    "crates/genome-tiles",
+    "crates/assembly-cli",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Genome Assembly Studio Contributors"]
+license = "MIT"

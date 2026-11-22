@@ -72,5 +72,15 @@ yarn-error.log*
 
 # Python
 venv
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite
+*.sqlite3
+data/
+.pytest_cache/
 
 PLAN.md
