@@ -1,0 +1,15 @@
+[package]
+name = "sequence-io"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+assembly-core = { path = "../assembly-core" }
+flate2 = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2.0"
+
+[dev-dependencies]
+tempfile = "3.27"
+
