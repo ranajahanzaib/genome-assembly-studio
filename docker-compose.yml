@@ -1,0 +1,41 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.api
+    container_name: genome-studio-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./data/genome_studio.db
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - SEED_DEMO_DATA=true
+      - DATA_DIR=/app/data
+    volumes:
+      - studio-data:/app/data
+      - ./datasets:/app/datasets:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.web
+    container_name: genome-studio-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      - NODE_ENV=production
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  studio-data:

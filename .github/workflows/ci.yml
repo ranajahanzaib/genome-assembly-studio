@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Integration
 
 on:
   push:
@@ -7,27 +7,82 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  rust-tests:
+    name: Rust Core Engine Tests
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+
+      - name: Run Cargo Tests
+        run: cargo test --tests --all
+
+  python-tests:
+    name: Python Backend API Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Rust CLI for API Integration
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Rust CLI
+        run: cargo build -p assembly-cli
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi uvicorn sqlalchemy pydantic python-multipart httpx pytest pytest-asyncio
+
+      - name: Run Pytest
+        env:
+          PYTHONPATH: .
+          GENOME_STUDIO_BIN: ./target/debug/genome-studio
+        run: pytest services/api/tests
+
+  web-build:
+    name: Next.js Web Frontend Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: "pnpm"
 
-      # Uncomment and adjust the steps below to match your project's setup
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
-      # - name: Install dependencies
-      #   run: npm ci
-
-      # - name: Lint
-      #   run: npm run lint
-
-      # - name: Run tests
-      #   run: npm test
-
-      # - name: Build
-      #   run: npm run build
+      - name: Build Shared Packages & Next.js App
+        env:
+          BROWSERSLIST: "defaults"
+        run: |
+          pnpm --filter @genome-studio/ui build
+          pnpm --filter @genome-studio/visualization build
+          pnpm --filter web build

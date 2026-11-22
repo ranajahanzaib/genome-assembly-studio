@@ -1,0 +1,42 @@
+# Multi-stage Dockerfile for Genome Assembly Studio Backend (FastAPI + Rust Engine)
+
+FROM rust:1.85-slim-bookworm AS rust-builder
+WORKDIR /build
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY Cargo.toml Cargo.lock ./
+COPY crates ./crates
+
+RUN cargo build --release -p assembly-cli
+
+FROM python:3.12-slim-bookworm AS runtime
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    minimap2 \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Rust CLI
+COPY --from=rust-builder /build/target/release/genome-studio /usr/local/bin/genome-studio
+
+# Install Python requirements
+COPY requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -r requirements.txt
+
+COPY services/api/app ./services/api/app
+COPY datasets ./datasets
+
+ENV PYTHONPATH=/app/services/api
+ENV PORT=8000
+ENV GENOME_STUDIO_BIN=/usr/local/bin/genome-studio
+
+EXPOSE 8000
+
+CMD ["uvicorn", "services.api.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
