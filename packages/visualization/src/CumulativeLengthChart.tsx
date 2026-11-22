@@ -125,21 +125,24 @@ export const CumulativeLengthChart: React.FC<CumulativeLengthChartProps> = ({
             y2={innerHeight}
             stroke="#475569"
           />
-          {xScale.ticks(Math.min(8, maxIndex)).map((t) => (
-            <g
-              key={`xt_${t}`}
-              transform={`translate(${xScale(t)}, ${innerHeight})`}
-            >
-              <line y2={5} stroke="#475569" />
-              <text
-                y={16}
-                textAnchor="middle"
-                className="text-[10px] font-mono fill-slate-600 dark:fill-slate-400"
+          {xScale
+            .ticks(Math.min(8, maxIndex))
+            .filter(Number.isInteger)
+            .map((t) => (
+              <g
+                key={`xt_${t}`}
+                transform={`translate(${xScale(t)}, ${innerHeight})`}
               >
-                {t}
-              </text>
-            </g>
-          ))}
+                <line y2={5} stroke="#475569" />
+                <text
+                  y={16}
+                  textAnchor="middle"
+                  className="text-[10px] font-mono fill-slate-600 dark:fill-slate-400"
+                >
+                  {t}
+                </text>
+              </g>
+            ))}
           <text
             x={innerWidth / 2}
             y={innerHeight + 34}

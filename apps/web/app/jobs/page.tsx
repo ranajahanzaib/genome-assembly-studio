@@ -98,7 +98,7 @@ export default function JobsPage() {
             >
               {assemblies.map((a) => (
                 <option key={a.id} value={a.id}>
-                  {a.name} ({a.version})
+                  {`${a.name} (${a.version})`}
                 </option>
               ))}
             </select>

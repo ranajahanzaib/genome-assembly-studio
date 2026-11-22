@@ -83,8 +83,9 @@ export const GenomeTrackBrowser: React.FC<GenomeTrackBrowserProps> = ({
   const showNucleotides = viewSpan <= 120 && visibleSeq.length > 0;
 
   const handleCopySequence = () => {
-    if (visibleSeq) {
-      navigator.clipboard.writeText(visibleSeq);
+    const textToCopy = visibleSeq || sequenceString;
+    if (textToCopy) {
+      navigator.clipboard.writeText(textToCopy);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -139,10 +140,11 @@ export const GenomeTrackBrowser: React.FC<GenomeTrackBrowserProps> = ({
           >
             →
           </button>
-          {visibleSeq && (
+          {Boolean(sequenceString) && (
             <button
               onClick={handleCopySequence}
               className="ml-2 px-2.5 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 rounded font-medium transition-colors"
+              title="Copy current FASTA sequence"
             >
               {copied ? "Copied!" : "Copy FASTA"}
             </button>
@@ -167,7 +169,7 @@ export const GenomeTrackBrowser: React.FC<GenomeTrackBrowserProps> = ({
               stroke="#475569"
               strokeWidth={1.5}
             />
-            {xScale.ticks(8).map((t) => {
+            {xScale.ticks(6).map((t) => {
               const xPos = xScale(t);
               const anchor =
                 xPos < 35 ? "start" : xPos > width - 45 ? "end" : "middle";

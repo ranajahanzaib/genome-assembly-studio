@@ -225,8 +225,8 @@ export default function QualityPage() {
       </div>
 
       {/* 3. CheckM2 Prokaryotic Quality Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="p-5 flex flex-col justify-between gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        <Card className="p-5 flex flex-col justify-between gap-3 h-full">
           <div className="flex items-center justify-between">
             <span className="font-bold text-xs text-slate-700 dark:text-slate-300">
               CheckM2 • Draft v1
@@ -249,13 +249,13 @@ export default function QualityPage() {
               <p className="text-xl font-bold font-mono text-amber-600">2.4%</p>
             </div>
           </div>
-          <p className="text-[11px] text-slate-500 font-mono mt-1">
+          <p className="text-[11px] text-slate-500 font-mono mt-1 min-h-[32px] flex items-center">
             Model: GradientBoost_v1.0.2 • Note: Elevated duplication in inverted
             contig
           </p>
         </Card>
 
-        <Card className="p-5 flex flex-col justify-between gap-3">
+        <Card className="p-5 flex flex-col justify-between gap-3 h-full">
           <div className="flex items-center justify-between">
             <span className="font-bold text-xs text-slate-700 dark:text-slate-300">
               CheckM2 • Polished v2
@@ -280,7 +280,7 @@ export default function QualityPage() {
               </p>
             </div>
           </div>
-          <p className="text-[11px] text-slate-500 font-mono mt-1">
+          <p className="text-[11px] text-slate-500 font-mono mt-1 min-h-[32px] flex items-center">
             Model: GradientBoost_v1.0.2 • Verified low contamination
           </p>
         </Card>

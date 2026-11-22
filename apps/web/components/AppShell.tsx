@@ -204,7 +204,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <select
                 value={currentProjectId || ""}
                 onChange={(e) => setCurrentProject(e.target.value)}
-                className="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 font-medium text-slate-800 dark:text-slate-200 outline-none focus:ring-1 focus:ring-blue-500 max-w-[160px] md:max-w-[200px] truncate"
+                className="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 font-medium text-slate-800 dark:text-slate-200 outline-none focus:ring-1 focus:ring-blue-500 max-w-[240px] lg:max-w-[340px] truncate"
               >
                 {projects.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -222,11 +222,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <select
                 value={currentAssemblyId || ""}
                 onChange={(e) => setCurrentAssembly(e.target.value)}
-                className="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 font-medium text-slate-800 dark:text-slate-200 outline-none focus:ring-1 focus:ring-blue-500 max-w-[200px] md:max-w-[220px] truncate"
+                className="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 font-medium text-slate-800 dark:text-slate-200 outline-none focus:ring-1 focus:ring-blue-500 max-w-[220px] lg:max-w-[280px] truncate"
               >
                 {assemblies.map((a) => (
                   <option key={a.id} value={a.id}>
-                    {a.name} ({a.version})
+                    {`${a.name} (${a.version})`}
                   </option>
                 ))}
               </select>

@@ -45,6 +45,35 @@ export const AssemblyDotPlot: React.FC<AssemblyDotPlotProps> = ({
 
   const [hoveredAln, setHoveredAln] = useState<AlignmentBlock | null>(null);
 
+  // Compute cumulative query offsets for multi-scaffold assemblies
+  const queryOffsets = React.useMemo(() => {
+    const offsets: Record<string, number> = {};
+    let current = 0;
+    const seen = new Set<string>();
+    for (const aln of alignments) {
+      if (!seen.has(aln.query_name)) {
+        seen.add(aln.query_name);
+        offsets[aln.query_name] = current;
+        current += aln.query_length;
+      }
+    }
+    return offsets;
+  }, [alignments]);
+
+  const effectiveAssemblyLength = React.useMemo(() => {
+    const totalFromOffsets = Object.values(queryOffsets).reduce(
+      (sum, off, idx, arr) => {
+        // Find the last scaffold's length
+        const keys = Object.keys(queryOffsets);
+        const lastKey = keys[keys.length - 1];
+        const lastAln = alignments.find((a) => a.query_name === lastKey);
+        return (queryOffsets[lastKey] || 0) + (lastAln?.query_length || 0);
+      },
+      0,
+    );
+    return Math.max(assemblyLength || 50000, totalFromOffsets || 50000);
+  }, [assemblyLength, queryOffsets, alignments]);
+
   const xScale = d3
     .scaleLinear()
     .domain([0, referenceLength || 50000])
@@ -52,7 +81,7 @@ export const AssemblyDotPlot: React.FC<AssemblyDotPlotProps> = ({
 
   const yScale = d3
     .scaleLinear()
-    .domain([0, assemblyLength || 50000])
+    .domain([0, effectiveAssemblyLength])
     .range([innerHeight, 0]);
 
   return (
@@ -106,13 +135,36 @@ export const AssemblyDotPlot: React.FC<AssemblyDotPlotProps> = ({
             opacity={0.4}
           />
 
+          {/* Scaffold boundaries */}
+          {Object.entries(queryOffsets).map(([name, offset]) => {
+            if (offset === 0) return null;
+            const y = yScale(offset);
+            return (
+              <line
+                key={`scaffold_sep_${name}`}
+                x1={0}
+                x2={innerWidth}
+                y1={y}
+                y2={y}
+                stroke="#94A3B8"
+                strokeDasharray="2,2"
+                opacity={0.5}
+                className="dark:stroke-slate-600"
+              />
+            );
+          })}
+
           {/* Alignment segments */}
           {alignments.map((aln, idx) => {
             const isFwd = aln.strand === "Forward" || aln.strand === "+";
+            const qOffset = queryOffsets[aln.query_name] ?? 0;
+            const qStart = aln.query_start + qOffset;
+            const qEnd = aln.query_end + qOffset;
+
             const x1 = xScale(aln.target_start);
             const x2 = xScale(aln.target_end);
-            const y1 = isFwd ? yScale(aln.query_start) : yScale(aln.query_end);
-            const y2 = isFwd ? yScale(aln.query_end) : yScale(aln.query_start);
+            const y1 = isFwd ? yScale(qStart) : yScale(qEnd);
+            const y2 = isFwd ? yScale(qEnd) : yScale(qStart);
 
             const isHovered = hoveredAln === aln;
             const strokeColor = isFwd ? "#2563EB" : "#E11D48";

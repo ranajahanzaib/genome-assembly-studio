@@ -154,7 +154,7 @@ function AssembliesContent() {
                         {a.name}
                       </span>
                       <span className="text-[10px] text-slate-500 font-mono">
-                        {a.filename} ({a.version})
+                        {`${a.filename} (${a.version})`}
                       </span>
                     </div>
                   </td>
@@ -171,22 +171,22 @@ function AssembliesContent() {
                       {a.assembly_type}
                     </Badge>
                   </td>
-                  <td className="py-3 px-4 font-mono font-medium text-slate-800 dark:text-slate-200">
+                  <td className="py-3 px-4 font-mono font-medium text-slate-800 dark:text-slate-200 whitespace-nowrap">
                     {m ? `${(m.total_length / 1000).toLocaleString()} kb` : "—"}
                   </td>
-                  <td className="py-3 px-4 font-mono text-slate-700 dark:text-slate-300">
+                  <td className="py-3 px-4 font-mono text-slate-700 dark:text-slate-300 whitespace-nowrap">
                     {m ? m.contig_count : "—"}
                   </td>
-                  <td className="py-3 px-4 font-mono font-bold text-blue-600 dark:text-blue-400">
+                  <td className="py-3 px-4 font-mono font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
                     {m ? `${(m.n50 / 1000).toLocaleString()} kb` : "—"}
                   </td>
-                  <td className="py-3 px-4 font-mono text-slate-700 dark:text-slate-300">
+                  <td className="py-3 px-4 font-mono text-slate-700 dark:text-slate-300 whitespace-nowrap">
                     {m ? m.l50 : "—"}
                   </td>
-                  <td className="py-3 px-4 font-mono text-slate-700 dark:text-slate-300">
+                  <td className="py-3 px-4 font-mono text-slate-700 dark:text-slate-300 whitespace-nowrap">
                     {m ? `${m.gc_percent.toFixed(2)}%` : "—"}
                   </td>
-                  <td className="py-3 px-4 font-mono text-slate-700 dark:text-slate-300">
+                  <td className="py-3 px-4 font-mono text-slate-700 dark:text-slate-300 whitespace-nowrap">
                     {m
                       ? m.gap_count > 0
                         ? `${m.gap_count} (${m.total_gap_length} bp)`

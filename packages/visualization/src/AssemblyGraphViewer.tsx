@@ -80,12 +80,12 @@ export const AssemblyGraphViewer: React.FC<AssemblyGraphViewerProps> = ({
         "link",
         d3
           .forceLink(simLinks as any)
-          .distance(80)
+          .distance(110)
           .strength(0.8),
       )
-      .force("charge", d3.forceManyBody().strength(-240))
+      .force("charge", d3.forceManyBody().strength(-300))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide().radius(28));
+      .force("collision", d3.forceCollide().radius(45));
 
     // Coverage color scale
     const colorScale = d3
@@ -131,9 +131,16 @@ export const AssemblyGraphViewer: React.FC<AssemblyGraphViewerProps> = ({
 
     node
       .append("rect")
-      .attr("x", (d) => -Math.max(22, Math.min(60, d.length / 25)))
+      .attr("x", (d) => {
+        const textW = d.id.length * 7.5 + 20;
+        const pillW = Math.max(textW, Math.min(140, d.length / 10));
+        return -pillW / 2;
+      })
       .attr("y", -14)
-      .attr("width", (d) => Math.max(44, Math.min(120, d.length / 12.5)))
+      .attr("width", (d) => {
+        const textW = d.id.length * 7.5 + 20;
+        return Math.max(textW, Math.min(140, d.length / 10));
+      })
       .attr("height", 28)
       .attr("rx", 14)
       .attr("fill", (d) =>
@@ -186,6 +193,8 @@ export const AssemblyGraphViewer: React.FC<AssemblyGraphViewerProps> = ({
         <div className="flex items-center gap-1.5 ml-2">
           <span className="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
           <span>Normal (~30x)</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-500 ml-1.5"></span>
+          <span>Low (&lt;20x)</span>
           <span className="w-2.5 h-2.5 rounded-full bg-red-600 ml-1.5"></span>
           <span>Repeat (50x+)</span>
         </div>

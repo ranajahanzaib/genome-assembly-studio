@@ -169,7 +169,7 @@ export default function ComparePage() {
           >
             {assemblies.map((a) => (
               <option key={a.id} value={a.id}>
-                {a.name} ({a.version})
+                {`${a.name} (${a.version})`}
               </option>
             ))}
           </select>
@@ -186,7 +186,7 @@ export default function ComparePage() {
           >
             {assemblies.map((a) => (
               <option key={a.id} value={a.id}>
-                {a.name} ({a.version})
+                {`${a.name} (${a.version})`}
               </option>
             ))}
           </select>

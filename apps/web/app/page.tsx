@@ -126,8 +126,8 @@ export default function OverviewPage() {
           label="Peak N50 Contiguity"
           value={bestN50 > 0 ? `${(bestN50 / 1000).toLocaleString()}` : "—"}
           unit="kbp"
-          subtext="Top assembly contiguity"
-          trend={{ value: "+300% in polished v2", isPositive: true }}
+          subtext="Reference benchmark (50 kb)"
+          trend={{ value: "+300% (v1 → v2)", isPositive: true }}
           icon={<Activity className="w-5 h-5" />}
         />
       </div>

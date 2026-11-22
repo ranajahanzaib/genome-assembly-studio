@@ -42,18 +42,21 @@ export const ContigHistogram: React.FC<ContigHistogramProps> = ({
       <svg width={width} height={height}>
         <g transform={`translate(${margin.left}, ${margin.top})`}>
           {/* Grid lines */}
-          {yScale.ticks(5).map((t) => (
-            <line
-              key={`ygrid_${t}`}
-              x1={0}
-              x2={innerWidth}
-              y1={yScale(t)}
-              y2={yScale(t)}
-              stroke="#E2E8F0"
-              strokeDasharray="2,2"
-              className="dark:stroke-slate-800"
-            />
-          ))}
+          {yScale
+            .ticks(5)
+            .filter(Number.isInteger)
+            .map((t) => (
+              <line
+                key={`ygrid_${t}`}
+                x1={0}
+                x2={innerWidth}
+                y1={yScale(t)}
+                y2={yScale(t)}
+                stroke="#E2E8F0"
+                strokeDasharray="2,2"
+                className="dark:stroke-slate-800"
+              />
+            ))}
 
           {/* Bars */}
           {bins.map((bin, i) => {
@@ -123,19 +126,22 @@ export const ContigHistogram: React.FC<ContigHistogramProps> = ({
           </text>
 
           <line x1={0} x2={0} y1={0} y2={innerHeight} stroke="#475569" />
-          {yScale.ticks(4).map((t) => (
-            <g key={`yt_${t}`} transform={`translate(0, ${yScale(t)})`}>
-              <line x2={-5} stroke="#475569" />
-              <text
-                x={-8}
-                alignmentBaseline="middle"
-                textAnchor="end"
-                className="text-[10px] font-mono fill-slate-600 dark:fill-slate-400"
-              >
-                {t}
-              </text>
-            </g>
-          ))}
+          {yScale
+            .ticks(4)
+            .filter(Number.isInteger)
+            .map((t) => (
+              <g key={`yt_${t}`} transform={`translate(0, ${yScale(t)})`}>
+                <line x2={-5} stroke="#475569" />
+                <text
+                  x={-8}
+                  alignmentBaseline="middle"
+                  textAnchor="end"
+                  className="text-[10px] font-mono fill-slate-600 dark:fill-slate-400"
+                >
+                  {t}
+                </text>
+              </g>
+            ))}
           <text
             transform="rotate(-90)"
             x={-innerHeight / 2}

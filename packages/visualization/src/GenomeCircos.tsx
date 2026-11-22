@@ -65,7 +65,7 @@ export const GenomeCircos: React.FC<GenomeCircosProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartAngle, setDragStartAngle] = useState(0);
 
-  const radius = Math.min(width, height) / 2 - 40;
+  const radius = Math.min(width, height) / 2 - 62;
   const outerRadius = radius;
   const chrRingWidth = 18;
   const chrInnerRadius = outerRadius - chrRingWidth;
