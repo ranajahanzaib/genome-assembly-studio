@@ -6,7 +6,9 @@ test/node_modules
 .pnp
 .pnp.js
 
-# Testing
+# Local CLI Run Output
+results/
+index/
 coverage
 .nyc_output
 test/**/out*

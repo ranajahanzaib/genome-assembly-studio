@@ -40,7 +40,7 @@ enum Commands {
         #[arg(long, default_value_t = 10)]
         min_gap: usize,
         /// Sliding window size for GC profiling
-        #[arg(long, default_value_t = 5000)]
+        #[arg(long, visible_alias = "window", default_value_t = 5000)]
         window_size: usize,
         /// Sliding window step for GC profiling
         #[arg(long, default_value_t = 2500)]
@@ -70,7 +70,7 @@ enum Commands {
         /// Input FASTA / FNA / FA file
         fasta: PathBuf,
         /// Window size in base pairs
-        #[arg(long, default_value_t = 5000)]
+        #[arg(long, visible_alias = "window", default_value_t = 5000)]
         window_size: usize,
         /// Step size in base pairs
         #[arg(long, default_value_t = 2500)]

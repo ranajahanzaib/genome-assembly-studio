@@ -325,7 +325,15 @@ def get_missing_regions(assembly_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Assembly not found")
 
     # Check for alignments
-    if "v1" in a.version.lower() or "draft" in a.name.lower():
+    if "ref" in a.version.lower() or "reference" in a.name.lower() or a.assembly_type == "reference":
+        return {
+            "reference_chromosome": "chr1",
+            "reference_length": 50000,
+            "missing_regions": [],
+            "total_uncovered_bp": 0,
+            "reference_coverage_percent": 100.0
+        }
+    elif "v1" in a.version.lower() or "draft" in a.name.lower():
         return {
             "reference_chromosome": "chr1",
             "reference_length": 50000,

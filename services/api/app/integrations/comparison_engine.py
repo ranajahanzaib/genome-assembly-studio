@@ -88,21 +88,27 @@ def generate_comparison_findings(
     # 2. Contig Count Fragmentation
     ctg_1 = baseline_stats.get("contig_count", 0)
     ctg_2 = compared_stats.get("contig_count", 0)
+    unit_1 = "contig" if ctg_1 == 1 else "contigs"
+    unit_2 = "contig" if ctg_2 == 1 else "contigs"
     if ctg_2 < ctg_1:
+        diff_count = ctg_1 - ctg_2
+        diff_unit = "piece" if diff_count == 1 else "pieces"
         findings.append({
             "id": str(uuid.uuid4()),
             "category": "improvement",
-            "title": f"Assembly Fragmentation Reduced ({ctg_1} -> {ctg_2} contigs)",
-            "description": f"Number of sequence pieces decreased by {ctg_1 - ctg_2}, demonstrating successful scaffolding or gap closing.",
+            "title": f"Assembly Fragmentation Reduced ({ctg_1} {unit_1} -> {ctg_2} {unit_2})",
+            "description": f"Number of sequence pieces decreased by {diff_count} {diff_unit}, demonstrating successful scaffolding or gap closing.",
             "metric": "Contig Count",
             "evidence": f"Baseline contigs: {ctg_1} -> Compared contigs: {ctg_2}"
         })
     elif ctg_2 > ctg_1:
+        diff_count = ctg_2 - ctg_1
+        diff_unit = "fragment" if diff_count == 1 else "fragments"
         findings.append({
             "id": str(uuid.uuid4()),
             "category": "regression",
-            "title": f"Higher Assembly Fragmentation ({ctg_2} vs {ctg_1} contigs)",
-            "description": f"The newer assembly is split into {ctg_2 - ctg_1} additional fragments.",
+            "title": f"Higher Assembly Fragmentation ({ctg_2} {unit_2} vs {ctg_1} {unit_1})",
+            "description": f"The newer assembly is split into {diff_count} additional {diff_unit}.",
             "metric": "Contig Count",
             "evidence": f"Baseline contigs: {ctg_1} -> Compared contigs: {ctg_2}"
         })
