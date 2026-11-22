@@ -1,46 +1,81 @@
-## Contributing
+# Contributing to Genome Assembly Studio
 
-We welcome contributions of all kinds to improve this project! Here's how you can get involved:
+Thank you for your interest in contributing to **Genome Assembly Studio**! We welcome contributions ranging from bug reports and documentation enhancements to new scientific visualizations and algorithm optimizations.
 
-1. **Fork the Repository**: Start by forking the repository to your GitHub account.
+---
 
-2. **Clone Your Fork**: Clone the forked repository to your local machine:
+## Code of Conduct
 
+All contributors and participants are expected to adhere to our [Code of Conduct](CODE_OF_CONDUCT.md). Please report unacceptable behavior through GitHub Private Security Advisories.
+
+---
+
+## Development Setup
+
+### 1. Prerequisites
+
+- **Rust**: 1.80+ (`rustc` and `cargo`)
+- **Python**: 3.11 or 3.12 (`python3` and `pip` or `uv`)
+- **Node.js**: 20+ or 22+ and `pnpm` (version 9 or 10)
+
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/ranajahanzaib/genome-assembly-studio.git
+cd genome-assembly-studio
+```
+
+### 3. Build & Test Rust Core Engine
+
+```bash
+cargo build --release
+cargo test --tests
+```
+
+### 4. Setup & Test Python Backend
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+PYTHONPATH=. pytest services/api/tests
+```
+
+### 5. Setup & Test Web Frontend
+
+```bash
+pnpm install
+pnpm --filter @genome-studio/ui build
+pnpm --filter @genome-studio/visualization build
+pnpm --filter web build
+```
+
+---
+
+## Making Changes
+
+1. **Create a Topic Branch**:
    ```bash
-   git clone <repo_url>
-   cd repo_dir
+   git checkout -b feature/your-feature-name
    ```
+2. **Follow Coding Standards**:
+   - **TypeScript**: Strict type checking with clean interfaces; avoid `any`.
+   - **Rust**: Idiomatic Rust formatted with `cargo fmt` and checked with `cargo clippy`.
+   - **Python**: Type-annotated FastAPI routes and Pydantic v2 models.
+3. **Run Test Suites**:
+   - Ensure all Rust unit tests pass (`cargo test --tests`).
+   - Ensure Python backend tests pass (`pytest services/api/tests`).
+   - Ensure Next.js builds cleanly (`pnpm --filter web build`).
+4. **Submit a Pull Request**:
+   - Provide a clear summary of what changes were made.
+   - Reference any related issues (`Fixes #123`).
 
-3. **Create a Branch**: Create a new branch for your feature or bug fix:
+---
 
-   ```bash
-   git checkout -b feature-name
-   ```
+## Reporting Issues
 
-4. **Make Changes**: Make your changes to the codebase. Be sure to follow existing code style and conventions.
+If you encounter bugs, unexpected metric behavior, or visualization glitches:
 
-5. **Commit Changes**: Commit your changes with a clear and descriptive message:
-
-   ```bash
-   git commit -m "Add detailed description of the changes"
-   ```
-
-6. **Push Changes**: Push your changes to your fork:
-
-   ```bash
-   git push origin feature-name
-   ```
-
-7. **Submit a Pull Request**: Open a pull request from your branch to the main repository's branch. Include a detailed description of your changes and the problem they solve.
-
-8. **Review and Feedback**: Participate in the review process. Make any requested changes, and your contribution will be merged!
-
-### Guidelines
-
-- Ensure your code follows the existing style and conventions.
-- Include tests for any new functionality or bug fixes.
-- Write clear, concise commit messages and pull request descriptions.
-
-### Issues
-
-Feel free to report bugs or suggest enhancements by creating an issue. Be sure to include detailed information about the problem and, if possible, steps to reproduce it.
+- Check existing open and closed issues first.
+- Open a new issue using our [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md).
+- Include reproducible inputs, assembly formats, and terminal logs.
