@@ -1,0 +1,10 @@
+{
+  "lineage": "enterobacterales_odb10",
+  "database_release": "2024-01-08",
+  "complete_single_copy": 432,
+  "complete_duplicated": 3,
+  "fragmented": 4,
+  "missing": 1,
+  "total_genes": 440,
+  "completeness_percent": 98.86
+}

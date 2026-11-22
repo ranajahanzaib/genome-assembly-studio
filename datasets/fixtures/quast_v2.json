@@ -1,0 +1,10 @@
+{
+  "genome_fraction": 99.6,
+  "duplication_ratio": 1.002,
+  "misassemblies": 0,
+  "mismatches_per_100k": 24.1,
+  "indels_per_100k": 3.4,
+  "largest_alignment": 22000,
+  "total_aligned_length": 49800,
+  "reference_coverage": 99.6
+}

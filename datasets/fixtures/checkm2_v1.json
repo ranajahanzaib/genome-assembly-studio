@@ -1,0 +1,9 @@
+{
+  "completeness": 94.2,
+  "contamination": 2.4,
+  "model": "GradientBoost_v1.0.2",
+  "quality_class": "Medium Quality",
+  "warnings": [
+    "Elevated contamination estimate in contig_04_inv"
+  ]
+}
